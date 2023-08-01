@@ -21,6 +21,11 @@ sudo apt-get install php8.2-{common,curl,mbstring,xml,zip,sqlite3}
 ```
 
 ```bash
+curl -1sLf 'https://dl.cloudsmith.io/public/symfony/stable/setup.deb.sh' | sudo -E bash &&\
+sudo apt install symfony-cli
+```
+
+```bash
 curl -fsSL https://deb.nodesource.com/setup_18.x | sudo -E bash - &&\
 sudo apt-get install -y nodejs
 ```

@@ -2,7 +2,9 @@
 
 namespace App\Controller;
 
+use KnpU\OAuth2ClientBundle\Client\ClientRegistry;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
@@ -14,5 +16,16 @@ class UserController extends AbstractController
         return $this->render('user/index.html.twig', [
             'controller_name' => 'UserController',
         ]);
+    }
+
+    #[Route('/google/login', name: 'app_google_login')]
+    public function login(ClientRegistry $clientRegistry): RedirectResponse
+    {
+        return $clientRegistry->getClient('google')->redirect(['profile'], []);
+    }
+
+    #[Route('/google/callback', name: 'app_google_callback')]
+    public function callback(): void
+    {
     }
 }
