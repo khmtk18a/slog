@@ -1,0 +1,4 @@
+[tool.djlint]
+indent=2
+profile="nunjucks"
+extension="html.twig"
