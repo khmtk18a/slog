@@ -1,3 +1,0 @@
-{
-    "psalm.psalmScriptArgs": ["--in-memory=true"]
-}

@@ -1,5 +1,5 @@
-# Music Web Player
-Website to listen to music, upload music.
+# Slog
+Creating a Blog Design with Symfony, Vue.js, and Tailwind.
 
 ## Project Member
 - Vu Dinh Dung
@@ -21,6 +21,7 @@ sudo apt-get install php8.2-{common,curl,mbstring,xml,zip,sqlite3}
 ```
 
 ```bash
+curl -sS https://getcomposer.org/installer | php -- --install-dir=$HOME/.local/bin --filename=composer &&\
 curl -1sLf 'https://dl.cloudsmith.io/public/symfony/stable/setup.deb.sh' | sudo -E bash &&\
 sudo apt install symfony-cli
 ```
