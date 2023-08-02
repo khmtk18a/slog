@@ -31,6 +31,12 @@ curl -fsSL https://deb.nodesource.com/setup_18.x | sudo -E bash - &&\
 sudo apt-get install -y nodejs
 ```
 
+### Gỡ cài đặt
+```bash
+sudo apt-get purge --auto-remove php8.2* nodejs symfony-cli &&\
+rm $HOME/.local/bin/composer
+```
+
 ### Các công cụ tùy chọn
 ```bash
 pip install djlint
