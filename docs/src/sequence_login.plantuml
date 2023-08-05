@@ -1,0 +1,14 @@
+@startuml sequence_login
+
+actor User
+participant "Hệ thống" as App
+participant "Dịch vụ xác thực Google" as GoogleAuth
+
+User -> App: Mở ứng dụng
+App -> GoogleAuth: Yêu cầu đăng nhập
+GoogleAuth -> User: Yêu cầu cung cấp thông tin đăng nhập Google
+User -> GoogleAuth: Cung cấp thông tin đăng nhập Google
+GoogleAuth -> App: Trả lại thông tin đăng nhập
+App -> User: Hiển thị trang chủ ứng dụng
+
+@enduml

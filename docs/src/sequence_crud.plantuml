@@ -1,0 +1,39 @@
+@startuml sequence_manager_post
+title Quản lý bài viết
+
+actor User as "Admin"
+
+boundary View
+control Controller
+entity Model
+
+User -> View: Tạo yêu cầu tạo bài viết
+View -> Controller: Gửi yêu cầu tạo bài viết
+Controller -> Model: Tạo bài viết mới
+Model --> Controller: Xác nhận đã tạo thành công
+Controller --> View: Trả về kết quả tạo bài viết
+
+User -> View: Tạo yêu cầu hiển thị bài viết
+View -> Controller: Gửi yêu cầu lấy bài viết
+Controller -> Model: Lấy thông tin bài viết
+Model --> Controller: Trả về thông tin bài viết
+Controller --> View: Trả về kết quả hiển thị bài viết
+
+User -> View: Tạo yêu cầu cập nhật bài viết
+View -> Controller: Gửi yêu cầu cập nhật bài viết
+Controller -> Model: Lấy thông tin bài viết cần cập nhật
+Model --> Controller: Trả về thông tin bài viết
+Controller --> View: Trả về thông tin bài viết để cập nhật
+
+User -> View: Cập nhật thông tin bài viết
+View -> Controller: Gửi yêu cầu lưu thông tin cập nhật
+Controller -> Model: Cập nhật thông tin bài viết
+Model --> Controller: Xác nhận đã cập nhật thành công
+Controller --> View: Trả về kết quả cập nhật bài viết
+
+User -> View: Tạo yêu cầu xóa bài viết
+View -> Controller: Gửi yêu cầu xóa bài viết
+Controller -> Model: Xóa bài viết
+Model --> Controller: Xác nhận đã xóa thành công
+Controller --> View: Trả về kết quả xóa bài viết
+@enduml

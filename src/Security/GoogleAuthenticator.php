@@ -25,7 +25,7 @@ class GoogleAuthenticator extends OAuth2Authenticator implements AuthenticationE
 
     public function supports(Request $request): bool
     {
-        return $request->attributes->get('_route') === 'app_google_callback';
+        return 'app_google_callback' === $request->attributes->get('_route');
     }
 
     public function authenticate(Request $request): Passport
@@ -36,7 +36,7 @@ class GoogleAuthenticator extends OAuth2Authenticator implements AuthenticationE
         $accessToken = $this->fetchAccessToken($client);
 
         return new SelfValidatingPassport(
-            new UserBadge($accessToken->getToken(), function() use ($accessToken, $client) {
+            new UserBadge($accessToken->getToken(), function () use ($accessToken, $client) {
                 /** @var \League\OAuth2\Client\Provider\GoogleUser */
                 $googleUser = $client->fetchUserFromToken($accessToken);
 
@@ -66,7 +66,7 @@ class GoogleAuthenticator extends OAuth2Authenticator implements AuthenticationE
         return new RedirectResponse($targetUrl);
 
         // or, on success, let the request continue to be handled by the controller
-        //return null;
+        // return null;
     }
 
     public function onAuthenticationFailure(Request $request, AuthenticationException $exception): ?Response
@@ -76,7 +76,7 @@ class GoogleAuthenticator extends OAuth2Authenticator implements AuthenticationE
         return new Response($message, Response::HTTP_FORBIDDEN);
     }
 
-   /**
+    /**
      * Called when authentication is needed, but it's not sent.
      * This redirects to the 'login'.
      */

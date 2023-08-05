@@ -1,0 +1,17 @@
+@startuml usecase
+left to right direction
+
+actor U as "User"
+actor A as "Admin"
+
+package Blog {
+    usecase login as "Đăng nhập"
+    usecase manager as "Quản lý bài viết"
+    usecase reaction as "Tương tác bài viết"
+}
+
+A --> manager
+A --> login
+U --> reaction
+U --> login
+@enduml

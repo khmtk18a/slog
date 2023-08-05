@@ -1,0 +1,52 @@
+@startuml class_analysis
+left to right direction
+
+class User {
+  - id: int
+  - name: string
+  - google_id: string
+  + getName(): string
+  + getGoogleId(): string
+  + setName(name: string): void
+  + setGoogleId(id: string): void
+}
+
+class Post {
+  - id: int
+  - title: string
+  - content: string
+  - author: User
+  + getTitle(): string
+  + getContent(): string
+  + getAuthor(): User
+  + setTitle(title: string): void
+  + setContent(content: string): void
+  + setAuthor(author: User): void
+}
+
+class Tag {
+  - id: int
+  - name: string
+  + getName(): string
+  + setName(name: string): void
+}
+
+class Rating {
+  - id: int
+  - post: Post
+  - user: User
+  - value: int
+  + getPost(): Post
+  + getUser(): User
+  + getValue(): int
+  + setPost(post: Post): void
+  + setUser(user: User): void
+  + setValue(value: int): void
+}
+
+User "1" -- "n" Post
+Post "n" -- "m" Tag
+User "1" -- "n" Rating
+Post "1" -- "n" Rating
+
+@enduml

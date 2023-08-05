@@ -1,0 +1,28 @@
+@startuml rating_comment
+
+title Bình luận và đánh giá bài viết
+
+actor User
+participant View
+participant Controller
+participant Model
+
+User -> View: Xem bài viết
+View -> Controller: Gửi yêu cầu lấy bài viết
+Controller -> Model: Lấy thông tin bài viết
+Model --> Controller: Trả về thông tin bài viết
+Controller --> View: Trả về kết quả hiển thị bài viết
+
+User -> View: Tạo yêu cầu bình luận
+View -> Controller: Gửi yêu cầu tạo bình luận
+Controller -> Model: Tạo bình luận mới
+Model --> Controller: Xác nhận đã tạo bình luận thành công
+Controller --> View: Trả về kết quả tạo bình luận
+
+User -> View: Tạo yêu cầu đánh giá
+View -> Controller: Gửi yêu cầu tạo đánh giá
+Controller -> Model: Tạo đánh giá mới
+Model --> Controller: Xác nhận đã tạo đánh giá thành công
+Controller --> View: Trả về kết quả tạo đánh giá
+
+@enduml

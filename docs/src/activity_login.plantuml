@@ -1,0 +1,25 @@
+@startuml activity_login
+
+start
+:Người dùng chọn đăng nhập bằng tài khoản Google;
+if (Người dùng chưa đăng nhập) then (yes)
+    :Chuyển hướng đến trang đăng nhập Google;
+    if (Người dùng đăng nhập thành công) then (yes)
+        :Lấy thông tin đăng nhập từ Google;
+        :Xác thực thông tin đăng nhập;
+        if (Xác thực thành công) then (yes)
+            :Tạo phiên đăng nhập;
+            :Đăng nhập thành công;
+        else (no)
+            :Hiển thị thông báo lỗi đăng nhập;
+        endif
+    else (no)
+        :Hiển thị thông báo lỗi đăng nhập;
+    endif
+else
+    :Người dùng đã đăng nhập;
+endif
+
+stop
+
+@enduml

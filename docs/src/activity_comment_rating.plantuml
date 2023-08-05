@@ -1,0 +1,20 @@
+@startuml activity_comment_rating
+
+start
+:Người dùng xem bài viết;
+if (Người dùng muốn bình luận?) then (yes)
+  :Hiển thị giao diện bình luận;
+  :Người dùng nhập nội dung bình luận;
+  :Gửi yêu cầu bình luận cho hệ thống;
+  :Lưu bình luận vào cơ sở dữ liệu;
+  :Hiển thị thông báo bình luận thành công;
+else if (Người dùng muốn đánh giá?) then (yes)
+  :Hiển thị giao diện đánh giá;
+  :Người dùng chọn điểm đánh giá;
+  :Gửi yêu cầu đánh giá cho hệ thống;
+  :Lưu đánh giá vào cơ sở dữ liệu;
+  :Hiển thị thông báo đánh giá thành công;
+endif
+stop
+
+@enduml

@@ -1,0 +1,26 @@
+@startuml usecase_decomposition
+
+actor A as "Admin"
+actor U as "User"
+
+usecase L as "Đăng nhập"
+
+usecase M as "Quản lý bài viết"
+(Tạo) --> M: <<extend>>
+(Sửa) --> M: <<extend>>
+(Xóa) --> M: <<extend>>
+
+usecase R as "Tương tác bài viết"
+(Bình luận) --> R: <<extend>>
+(Đánh giá) --> R: <<extend>>
+
+A -- M
+A -- L
+
+U -- R
+U -- L
+
+M --> L: <<include>>
+R --> L: <<include>>
+
+@enduml

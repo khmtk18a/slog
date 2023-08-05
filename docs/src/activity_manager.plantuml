@@ -1,0 +1,24 @@
+@startuml activity_manager
+
+start
+:Admin yêu cầu quản lý bài viết;
+
+:Hiển thị danh sách các bài viết;
+:Admin chọn bài viết;
+if (Admin chọn tạo bài viết mới?) then (yes)
+    :Admin tạo bài viết mới;
+    :Lưu bài viết vào hệ thống;
+else if (Admin chọn sửa bài viết?) then (yes)
+    :Admin chọn bài viết cần sửa;
+    :Admin chỉnh sửa bài viết;
+    :Lưu bài viết đã chỉnh sửa vào hệ thống;
+else if (Admin chọn xóa bài viết?) then (yes)
+    :Admin chọn bài viết cần xóa;
+    :Xóa bài viết khỏi hệ thống;
+else
+    :Admin chọn xem bài viết;
+    :Hiển thị nội dung bài viết;
+endif
+stop
+
+@enduml
