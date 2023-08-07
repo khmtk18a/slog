@@ -31,7 +31,16 @@ class Tag {
   + setName(name: string): void
 }
 
-class Rating {
+class Comment {
+    - id: int
+    - content: string
+    + getContent(): string
+    + getParent(): ?Comment
+    + setContent(content: string): void
+    + setParent(parent: Comment): void
+}
+
+class Vote {
   - id: int
   - post: Post
   - user: User
@@ -46,7 +55,9 @@ class Rating {
 
 User "1" -- "n" Post
 Post "n" -- "m" Tag
-User "1" -- "n" Rating
-Post "1" -- "n" Rating
+User "1" -- "n" Vote
+Post "1" -- "n" Vote
+Post "1" -- "n" Comment
+Comment "1" -- "n" Comment
 
 @enduml

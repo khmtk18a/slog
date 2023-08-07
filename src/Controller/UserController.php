@@ -28,4 +28,9 @@ class UserController extends AbstractController
     public function callback(): void
     {
     }
+
+    #[Route('/user/logout', name: 'app_user_logout')]
+    public function logout(): void
+    {
+    }
 }
