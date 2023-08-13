@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use KnpU\OAuth2ClientBundle\Client\ClientRegistry;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -32,5 +33,11 @@ class UserController extends AbstractController
     #[Route('/user/logout', name: 'app_user_logout')]
     public function logout(): void
     {
+    }
+
+    #[Route('/user/info', name: 'app_api_get_user')]
+    public function getUserInfo(): JsonResponse
+    {
+        return $this->json(['user' => $this->getUser()]);
     }
 }

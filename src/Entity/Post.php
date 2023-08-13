@@ -6,11 +6,15 @@ use App\Repository\PostRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\ORM\Mapping\HasLifecycleCallbacks;
+use Doctrine\ORM\Mapping\PrePersist;
+use Doctrine\ORM\Mapping\PreUpdate;
 use Gedmo\Timestampable\Timestampable;
 use Gedmo\Timestampable\Traits\TimestampableEntity;
 
+#[HasLifecycleCallbacks]
 #[ORM\Entity(repositoryClass: PostRepository::class)]
-class Post implements Timestampable
+class Post implements Timestampable, \JsonSerializable
 {
     use TimestampableEntity;
 
@@ -116,5 +120,24 @@ class Post implements Timestampable
         $this->tags->removeElement($tag);
 
         return $this;
+    }
+
+    #[PrePersist]
+    public function prePersist()
+    {
+        $now = new \DateTime();
+
+        $this->createdAt = $this->updatedAt = $now;
+    }
+
+    #[PreUpdate]
+    public function preUpdate()
+    {
+        $this->updatedAt = new \DateTime();
+    }
+
+    public function jsonSerialize()
+    {
+        return get_object_vars($this);
     }
 }

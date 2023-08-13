@@ -7,52 +7,61 @@ if (!Encore.isRuntimeEnvironmentConfigured()) {
 }
 
 Encore
-// directory where compiled assets will be stored
+  // directory where compiled assets will be stored
   .setOutputPath('public/build/')
-// public path used by the web server to access the output path
+  // public path used by the web server to access the output path
   .setPublicPath('/build')
-// only needed for CDN's or subdirectory deploy
-// .setManifestKeyPrefix('build/')
+  // only needed for CDN's or subdirectory deploy
+  // .setManifestKeyPrefix('build/')
 
-  .addEntry('app', './assets/app.js')
+  .addEntry('main', './assets/main.ts')
 
-// When enabled, Webpack "splits" your files into smaller pieces for greater optimization.
+  // When enabled, Webpack "splits" your files into smaller pieces for greater optimization.
   .splitEntryChunks()
 
-// will require an extra script tag for runtime.js
-// but, you probably want this, unless you're building a single-page app
+  // will require an extra script tag for runtime.js
+  // but, you probably want this, unless you're building a single-page app
   .enableSingleRuntimeChunk()
   .cleanupOutputBeforeBuild()
   .enableBuildNotifications()
   .enableSourceMaps(!Encore.isProduction())
-// enables hashed filenames (e.g. app.abc123.css)
+  // enables hashed filenames (e.g. app.abc123.css)
   .enableVersioning(Encore.isProduction())
 
-// configure Babel
-// .configureBabel((config) => {
-//     config.plugins.push('@babel/a-babel-plugin');
-// })
+  // configure Babel
+  // .configureBabel((config) => {
+  //     config.plugins.push('@babel/a-babel-plugin');
+  // })
 
-// enables and configure @babel/preset-env polyfills
+  // enables and configure @babel/preset-env polyfills
   .configureBabelPresetEnv((config) => {
     config.useBuiltIns = 'usage'
     config.corejs = '3.23'
   })
 
-// enables Sass/SCSS support
-// .enableSassLoader()
+  // enables Sass/SCSS support
+  .enableSassLoader()
 
-// uncomment if you use TypeScript
-// .enableTypeScriptLoader()
+  // uncomment if you use TypeScript
+  .enableTypeScriptLoader()
 
-// uncomment if you use React
-// .enableReactPreset()
+  // uncomment if you use React
+  // .enableReactPreset()
 
-// uncomment to get integrity="..." attributes on your script & link tags
-// requires WebpackEncoreBundle 1.4 or higher
-// .enableIntegrityHashes(Encore.isProduction())
+  // uncomment to get integrity="..." attributes on your script & link tags
+  // requires WebpackEncoreBundle 1.4 or higher
+  // .enableIntegrityHashes(Encore.isProduction())
 
-// uncomment if you're having problems with a jQuery plugin
-// .autoProvidejQuery()
+  // uncomment if you're having problems with a jQuery plugin
+  // .autoProvidejQuery()
+  .enablePostCssLoader()
+  .enableVueLoader()
+  .configureDevServerOptions(
+    /** @param {import('webpack-dev-server').Configuration} options */
+    options => {
+      options.watchFiles = ['templates/**/*.twig', 'src/**/*.php']
+      options.liveReload = true
+    }
+  )
 
 module.exports = Encore.getWebpackConfig()

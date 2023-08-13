@@ -18,7 +18,7 @@ use Symfony\Component\Security\Http\Authenticator\Passport\Passport;
 use Symfony\Component\Security\Http\Authenticator\Passport\SelfValidatingPassport;
 use Symfony\Component\Security\Http\EntryPoint\AuthenticationEntryPointInterface;
 
-class GoogleAuthenticator extends OAuth2Authenticator implements AuthenticationEntrypointInterface
+class GoogleAuthenticator extends OAuth2Authenticator implements AuthenticationEntryPointInterface
 {
     public function __construct(private ClientRegistry $clientRegistry, private UserRepository $userRepo, private RouterInterface $router)
     {

@@ -7,13 +7,21 @@ use App\Form\PostType;
 use App\Repository\PostRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpKernel\Attribute\MapQueryParameter;
 use Symfony\Component\Routing\Annotation\Route;
 
 #[Route('/post')]
 class PostController extends AbstractController
 {
+    #[Route('/fetch', name: 'app_api_fetch_post')]
+    public function getPosts(#[MapQueryParameter] int $offset, #[MapQueryParameter] int $limit, PostRepository $postRepo): JsonResponse
+    {
+        return $this->json($postRepo->getInRange($offset, $limit));
+    }
+
     #[Route('/', name: 'app_post_index', methods: ['GET'])]
     public function index(PostRepository $postRepository): Response
     {
@@ -30,6 +38,7 @@ class PostController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            $post->setUser($this->getUser());
             $entityManager->persist($post);
             $entityManager->flush();
 
