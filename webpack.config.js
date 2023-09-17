@@ -1,3 +1,4 @@
+const path = require('path')
 const Encore = require('@symfony/webpack-encore')
 
 // Manually configure the runtime environment if not already configured yet by the "encore" command.
@@ -14,7 +15,12 @@ Encore
   // only needed for CDN's or subdirectory deploy
   // .setManifestKeyPrefix('build/')
 
-  .addEntry('main', './assets/main.ts')
+  // .addEntry('main', './assets/main.ts')
+  .addEntry('admin', './assets/admin.js')
+  .addEntry('frontend', './frontend/main.js')
+  .addAliases({
+    '@': path.resolve(__dirname, './frontend')
+  })
 
   // When enabled, Webpack "splits" your files into smaller pieces for greater optimization.
   .splitEntryChunks()
@@ -53,7 +59,7 @@ Encore
   // .enableIntegrityHashes(Encore.isProduction())
 
   // uncomment if you're having problems with a jQuery plugin
-  // .autoProvidejQuery()
+  .autoProvidejQuery()
   .enablePostCssLoader()
   .enableVueLoader()
   .configureDevServerOptions(

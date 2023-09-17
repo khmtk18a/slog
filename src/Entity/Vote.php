@@ -2,10 +2,17 @@
 
 namespace App\Entity;
 
+use ApiPlatform\Doctrine\Orm\Filter\SearchFilter;
+use ApiPlatform\Metadata\ApiFilter;
+use ApiPlatform\Metadata\ApiResource;
 use App\Repository\VoteRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\ORM\Mapping\UniqueConstraint;
 
+#[ApiResource]
+#[ApiFilter(SearchFilter::class, properties: ['post' => 'exact'])]
 #[ORM\Entity(repositoryClass: VoteRepository::class)]
+#[UniqueConstraint('user_vote_idx', columns: ['user_id', 'post_id'])]
 class Vote
 {
     #[ORM\Id]

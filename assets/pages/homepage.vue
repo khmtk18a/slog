@@ -12,7 +12,7 @@ postStore.loadMore()
 <template>
   <div>
     <div v-if="posts">
-        <Post v-for="post in posts" :data="post"></Post>
+      <Post v-for="post in posts" :data="post"></Post>
     </div>
     <button @click="postStore.loadMore" v-if="canLoadMore">Load more...</button>
   </div>

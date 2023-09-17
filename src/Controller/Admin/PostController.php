@@ -1,12 +1,17 @@
 <?php
 
-namespace App\Controller;
+namespace App\Controller\Admin;
 
 use App\Entity\Post;
+use App\Entity\User;
 use App\Form\PostType;
+use App\Form\UploadType;
 use App\Repository\PostRepository;
 use Doctrine\ORM\EntityManagerInterface;
+use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\DependencyInjection\Attribute\Autowire;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -16,17 +21,22 @@ use Symfony\Component\Routing\Annotation\Route;
 #[Route('/post')]
 class PostController extends AbstractController
 {
-    #[Route('/fetch', name: 'app_api_fetch_post')]
-    public function getPosts(#[MapQueryParameter] int $offset, #[MapQueryParameter] int $limit, PostRepository $postRepo): JsonResponse
-    {
-        return $this->json($postRepo->getInRange($offset, $limit));
-    }
-
     #[Route('/', name: 'app_post_index', methods: ['GET'])]
-    public function index(PostRepository $postRepository): Response
-    {
+    public function index(
+        PostRepository $postRepository,
+        PaginatorInterface $paginatorInterface,
+        #[MapQueryParameter] int $page = 1,
+        #[MapQueryParameter] bool $hot = false
+    ): Response {
+        $property = $hot ? 'score' : 'updatedAt';
+
+        $qb = $postRepository->createQueryBuilder('p')
+            ->orderBy('p.'.$property, 'DESC');
+
+        $pagination = $paginatorInterface->paginate($qb, $page, 5);
+
         return $this->render('post/index.html.twig', [
-            'posts' => $postRepository->findAll(),
+            'pagination' => $pagination,
         ]);
     }
 
@@ -38,7 +48,10 @@ class PostController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $post->setUser($this->getUser());
+            $user = $this->getUser();
+            assert($user instanceof User);
+
+            $post->setUser($user);
             $entityManager->persist($post);
             $entityManager->flush();
 
@@ -51,7 +64,7 @@ class PostController extends AbstractController
         ]);
     }
 
-    #[Route('/{id}', name: 'app_post_show', methods: ['GET'])]
+    #[Route('/{id<\d+>}', name: 'app_post_show', methods: ['GET'])]
     public function show(Post $post): Response
     {
         return $this->render('post/show.html.twig', [
@@ -59,7 +72,7 @@ class PostController extends AbstractController
         ]);
     }
 
-    #[Route('/{id}/edit', name: 'app_post_edit', methods: ['GET', 'POST'])]
+    #[Route('/{id<\d+>}/edit', name: 'app_post_edit', methods: ['GET', 'POST'])]
     public function edit(Request $request, Post $post, EntityManagerInterface $entityManager): Response
     {
         $form = $this->createForm(PostType::class, $post);
@@ -77,14 +90,36 @@ class PostController extends AbstractController
         ]);
     }
 
-    #[Route('/{id}', name: 'app_post_delete', methods: ['POST'])]
+    #[Route('/{id<\d+>}', name: 'app_post_delete', methods: ['POST'])]
     public function delete(Request $request, Post $post, EntityManagerInterface $entityManager): Response
     {
-        if ($this->isCsrfTokenValid('delete'.$post->getId(), $request->request->get('_token'))) {
+        if ($this->isCsrfTokenValid('delete'.$post->getId(), $request->request->getString('_token'))) {
             $entityManager->remove($post);
             $entityManager->flush();
         }
 
         return $this->redirectToRoute('app_post_index', [], Response::HTTP_SEE_OTHER);
+    }
+
+    #[Route('/upload', name: 'app_post_upload', methods: ['POST'])]
+    public function upload(
+        Request $request,
+        #[Autowire('%uploadDir%')]
+        string $uploadDir
+    ): JsonResponse {
+        $form = $this->createForm(UploadType::class, []);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $image = $form->get('image')->getData();
+            assert($image instanceof UploadedFile);
+
+            $filename = bin2hex(random_bytes(6)).'.'.$image->guessExtension();
+            $image->move($uploadDir, $filename);
+
+            return $this->json(['data' => '/upload/'.$filename]);
+        }
+
+        return $this->json([], 500);
     }
 }

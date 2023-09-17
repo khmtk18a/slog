@@ -1,14 +1,21 @@
 @startuml sequence_login
 
 actor User
-participant "Hệ thống" as App
-participant "Dịch vụ xác thực Google" as GoogleAuth
+boundary View
+control Controller
+entity Model
+participant GoogleAPI
 
-User -> App: Mở ứng dụng
-App -> GoogleAuth: Yêu cầu đăng nhập
-GoogleAuth -> User: Yêu cầu cung cấp thông tin đăng nhập Google
-User -> GoogleAuth: Cung cấp thông tin đăng nhập Google
-GoogleAuth -> App: Trả lại thông tin đăng nhập
-App -> User: Hiển thị trang chủ ứng dụng
+User -> Controller: Yêu cầu đăng nhập
+Controller -> GoogleAPI: Yêu cầu Google đăng nhập
+GoogleAPI -> Controller: Google Login URL
+Controller -> User: Chuyển hướng đến Google đăng nhập
+User -> GoogleAPI: Gửi thông tin xác thực Google
+GoogleAPI -> User: Xác thực thông tin Google
+User -> GoogleAPI: Cấp phép truy cập
+GoogleAPI -> Controller: Google Access Token
+Controller -> Model: Lưu dữ liệu người dùng
+Model -> Controller: Dữ liệu người dùng đã lưu
+Controller -> User: Đăng nhập thành công
 
 @enduml

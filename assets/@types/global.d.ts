@@ -1,4 +1,4 @@
-export { };
+export { }
 
 declare global {
   type User = {
@@ -12,8 +12,13 @@ declare global {
     title: string
     content: string
     score: number
+    tags: Tag[]
     user: User
     createAt: string
     updateAt: string
+  }
+  type Tag = {
+    id: number
+    name: string
   }
 }

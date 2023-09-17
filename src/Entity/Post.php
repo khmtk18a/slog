@@ -2,6 +2,13 @@
 
 namespace App\Entity;
 
+use ApiPlatform\Doctrine\Orm\Filter\OrderFilter;
+use ApiPlatform\Doctrine\Orm\Filter\SearchFilter;
+use ApiPlatform\Metadata\ApiFilter;
+use ApiPlatform\Metadata\ApiProperty;
+use ApiPlatform\Metadata\ApiResource;
+use ApiPlatform\Metadata\Get;
+use ApiPlatform\Metadata\GetCollection;
 use App\Repository\PostRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -12,9 +19,12 @@ use Doctrine\ORM\Mapping\PreUpdate;
 use Gedmo\Timestampable\Timestampable;
 use Gedmo\Timestampable\Traits\TimestampableEntity;
 
+#[ApiResource(operations: [new Get(), new GetCollection()])]
 #[HasLifecycleCallbacks]
+#[ApiFilter(SearchFilter::class, properties: ['tags' => SearchFilter::STRATEGY_EXACT, 'title' => SearchFilter::STRATEGY_PARTIAL])]
+#[ApiFilter(OrderFilter::class, properties: ['createdAt', 'updatedAt', 'score'])]
 #[ORM\Entity(repositoryClass: PostRepository::class)]
-class Post implements Timestampable, \JsonSerializable
+class Post implements Timestampable
 {
     use TimestampableEntity;
 
@@ -26,23 +36,36 @@ class Post implements Timestampable, \JsonSerializable
     #[ORM\Column(length: 255)]
     private string $title;
 
-    #[ORM\Column(length: 255)]
+    #[ORM\Column(type: 'text')]
     private string $content;
 
     #[ORM\Column]
     private int $score = 0;
 
+    #[ApiProperty(readableLink: true)]
     #[ORM\ManyToOne(inversedBy: 'posts')]
     #[ORM\JoinColumn(nullable: false)]
     private User $user;
 
-    /** @var Collection<Tag> */
+    /** @var Collection<int,Tag> */
     #[ORM\ManyToMany(targetEntity: Tag::class, inversedBy: 'posts')]
     private Collection $tags;
+
+    /** @var Collection<int,Comment> */
+    #[ORM\OneToMany(mappedBy: 'post', targetEntity: Comment::class, orphanRemoval: true)]
+    private Collection $comments;
+
+    /** @var Collection<int,Vote> */
+    #[ORM\OneToMany(mappedBy: 'post', targetEntity: Vote::class, orphanRemoval: true)]
+    private Collection $votes;
+
+    private int $commentsCount;
 
     public function __construct()
     {
         $this->tags = new ArrayCollection();
+        $this->comments = new ArrayCollection();
+        $this->votes = new ArrayCollection();
     }
 
     public function getId(): int
@@ -123,7 +146,7 @@ class Post implements Timestampable, \JsonSerializable
     }
 
     #[PrePersist]
-    public function prePersist()
+    public function prePersist(): void
     {
         $now = new \DateTime();
 
@@ -131,13 +154,28 @@ class Post implements Timestampable, \JsonSerializable
     }
 
     #[PreUpdate]
-    public function preUpdate()
+    public function preUpdate(): void
     {
         $this->updatedAt = new \DateTime();
     }
 
-    public function jsonSerialize()
+    /**
+     * @return Collection<int,Comment>
+     */
+    public function getComments(): Collection
     {
-        return get_object_vars($this);
+        return $this->comments;
+    }
+
+    public function getCommentsCount(): int
+    {
+        return $this->commentsCount;
+    }
+
+    public function setCommentsCount(int $commentsCount): self
+    {
+        $this->commentsCount = $commentsCount;
+
+        return $this;
     }
 }

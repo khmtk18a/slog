@@ -3,7 +3,9 @@
 namespace App\Repository;
 
 use App\Entity\Comment;
+use App\Entity\Post;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\ORM\Query\Expr\Join;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
@@ -19,6 +21,22 @@ class CommentRepository extends ServiceEntityRepository
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, Comment::class);
+    }
+
+    /**
+     * Điếm Nested comments của bài viết.
+     */
+    public function countByPost(Post $post): int
+    {
+        // @phpstan-ignore-next-line
+        return $this->createQueryBuilder('c')
+            ->select('COUNT(c.id) + COUNT(r.id)')
+            ->leftJoin('c.comments', 'r', Join::WITH, 'r.parent = c')
+            ->where('c.post = :post')
+            ->setParameter('post', $post)
+            ->getQuery()
+            ->getSingleScalarResult()
+        ;
     }
 
     //    /**

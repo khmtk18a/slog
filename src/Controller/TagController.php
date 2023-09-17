@@ -10,10 +10,16 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 #[Route('/tag')]
+#[IsGranted('ROLE_ADMIN')]
 class TagController extends AbstractController
 {
+    public function __construct()
+    {
+    }
+
     #[Route('/', name: 'app_tag_index', methods: ['GET'])]
     public function index(TagRepository $tagRepository): Response
     {
@@ -71,7 +77,7 @@ class TagController extends AbstractController
     #[Route('/{id}', name: 'app_tag_delete', methods: ['POST'])]
     public function delete(Request $request, Tag $tag, EntityManagerInterface $entityManager): Response
     {
-        if ($this->isCsrfTokenValid('delete'.$tag->getId(), $request->request->get('_token'))) {
+        if ($this->isCsrfTokenValid('delete'.$tag->getId(), $request->request->getString('_token'))) {
             $entityManager->remove($tag);
             $entityManager->flush();
         }

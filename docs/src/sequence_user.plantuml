@@ -3,9 +3,9 @@
 title Bình luận và đánh giá bài viết
 
 actor User
-participant View
-participant Controller
-participant Model
+boundary View
+control Controller
+entity Model
 
 User -> View: Xem bài viết
 View -> Controller: Gửi yêu cầu lấy bài viết

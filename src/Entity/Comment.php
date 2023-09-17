@@ -2,25 +2,38 @@
 
 namespace App\Entity;
 
+use ApiPlatform\Doctrine\Orm\Filter\OrderFilter;
+use ApiPlatform\Doctrine\Orm\Filter\SearchFilter;
+use ApiPlatform\Metadata\ApiFilter;
+use ApiPlatform\Metadata\ApiProperty;
+use ApiPlatform\Metadata\ApiResource;
+use ApiPlatform\Metadata\Delete;
+use ApiPlatform\Metadata\Get;
+use ApiPlatform\Metadata\GetCollection;
+use ApiPlatform\Metadata\Post as PostApi;
 use App\Repository\CommentRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
+#[ApiResource(operations: [new Get(), new GetCollection(), new PostApi(), new Delete()])]
+#[ApiFilter(OrderFilter::class, properties: ['id'])]
+#[ApiFilter(SearchFilter::class, properties: ['post' => SearchFilter::STRATEGY_EXACT])]
 #[ORM\Entity(repositoryClass: CommentRepository::class)]
 class Comment
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
-    private ?int $id = null;
+    private int $id;
 
     #[ORM\Column(length: 255)]
-    private ?string $content = null;
+    private string $content;
 
+    #[ApiProperty(readableLink: true)]
     #[ORM\ManyToOne]
     #[ORM\JoinColumn(nullable: false)]
-    private ?User $user = null;
+    private User $user;
 
     #[ORM\ManyToOne]
     private ?Post $post = null;
@@ -28,7 +41,9 @@ class Comment
     #[ORM\ManyToOne(targetEntity: self::class, inversedBy: 'comments')]
     private ?self $parent = null;
 
-    #[ORM\OneToMany(mappedBy: 'reply', targetEntity: self::class, orphanRemoval: true)]
+    /** @var Collection<int,Comment> */
+    #[ApiProperty(readableLink: true)]
+    #[ORM\OneToMany(mappedBy: 'parent', targetEntity: self::class, orphanRemoval: true)]
     private Collection $comments;
 
     public function __construct()
@@ -36,12 +51,12 @@ class Comment
         $this->comments = new ArrayCollection();
     }
 
-    public function getId(): ?int
+    public function getId(): int
     {
         return $this->id;
     }
 
-    public function getContent(): ?string
+    public function getContent(): string
     {
         return $this->content;
     }
@@ -53,12 +68,12 @@ class Comment
         return $this;
     }
 
-    public function getUser(): ?User
+    public function getUser(): User
     {
         return $this->user;
     }
 
-    public function setUser(?User $user): static
+    public function setUser(User $user): static
     {
         $this->user = $user;
 

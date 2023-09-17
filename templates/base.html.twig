@@ -2,52 +2,14 @@
 <html>
   <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>
-      {% block title %}Welcome!{% endblock %}
+      {% block title %}gingteam{% endblock %}
     </title>
-    <link rel="stylesheet"
-          href="https://cdnjs.cloudflare.com/ajax/libs/primeicons/6.0.1/primeicons.min.css"
-          integrity="sha512-c0Y5PGgrf6YXC12zY4vBuSai7jo75U1vhowEhHTb6Hcn4PNv88Ip1fVFkFOhuXtb6qfFHbRvlfOznlgVTlVmUQ=="
-          crossorigin="anonymous"
-          referrerpolicy="no-referrer" />
-    <link rel="stylesheet"
-          href="https://cdn.jsdelivr.net/npm/@picocss/pico@1/css/pico.min.css">
-    {# {% block stylesheets %}{{ encore_entry_link_tags("main") }}{% endblock %} #}
+    {% block stylesheets %}{{ encore_entry_link_tags("app") }}{% endblock %}
   </head>
   <body>
-    <div class="container-fluid">
-      <nav>
-        <ul>
-          <li>
-            <a href="{{ path("app_homepage") }}" class="secondary">Home</a>
-          </li>
-        </ul>
-        <ul>
-          <li>
-            <strong>Slog</strong>
-          </li>
-        </ul>
-        <ul>
-          <li>
-            {% if is_granted('ROLE_USER') %}
-              <details role="list" dir="rtl">
-                <summary aria-haspopup="listbox" role="link">
-                  <i class="pi pi-user">{{ app.user.name }}</i>
-                </summary>
-                <ul role="listbox">
-                  <li>
-                    <a href="{{ path("app_user_logout") }}">Logout</a>
-                  </li>
-                </ul>
-              </details>
-            {% else %}
-              <a href="{{ path("app_google_login") }}"> <i class="pi pi-sign-in"></i> Login</a>
-            {% endif %}
-          </li>
-        </ul>
-      </nav>
-      {% block body %}{% endblock %}
-    </div>
+    {% block body %}{% endblock %}
   </body>
-  {% block javascripts %}{{ encore_entry_script_tags("main") }}{% endblock %}
+  {% block javascripts %}{{ encore_entry_script_tags("app") }}{% endblock %}
 </html>

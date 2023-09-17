@@ -2,5 +2,21 @@
     "plantuml.diagramsRoot": "docs/src",
     "plantuml.exportOutDir": "docs/out",
     "plantuml.render": "PlantUMLServer",
-    "plantuml.server": "https://www.plantuml.com/plantuml"
+    "plantuml.server": "https://www.plantuml.com/plantuml",
+    "tailwindCSS.experimental.classRegex": [
+        [
+            "class: ?\"([^\"]*)\"",
+            "([a-zA-Z0-9\\-:]+)"
+        ],
+    ],
+    "files.exclude": {
+        "**/.git": true,
+        "**/.svn": true,
+        "**/.hg": true,
+        "**/CVS": true,
+        "**/.DS_Store": true,
+        "**/Thumbs.db": true,
+        "**/var": true
+    },
+    "php.problems.scope": "all"
 }

@@ -1,0 +1,6 @@
+api_platform:
+  defaults:
+    pagination_items_per_page: 5
+  formats:
+    json: ["application/json"]
+    html: ["text/html"]

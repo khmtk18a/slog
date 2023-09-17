@@ -1,0 +1,38 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+.pi-card::before {
+  content: url("./svg/card.svg");
+}
+
+.pi-classic::before {
+  content: url("./svg/classic.svg");
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html {
+  font-size: 14px;
+  font-weight: 400;
+  overflow-x: hidden;
+}
+
+.normal-scrollbar::-webkit-scrollbar {
+  margin-left: -5px;
+  width: 4px; /* Độ rộng của thanh cuộn */
+  height: 6px; /* Chiều cao của thanh cuộn (chỉ áp dụng cho thanh cuộn ngang) */
+}
+
+.normal-scrollbar::-webkit-scrollbar-thumb {
+  background-color: #86efac; /* Màu sắc của thanh cuộn */
+  border-radius: 4px; /* Độ cong viền của thanh cuộn */
+}
+
+.normal-scrollbar::-webkit-scrollbar-track {
+  opacity: 0;
+}

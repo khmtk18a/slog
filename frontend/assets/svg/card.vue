@@ -1,0 +1,15 @@
+<template>
+  <svg
+    rpl=""
+    xmlns="http://www.w3.org/2000/svg"
+    viewBox="0 0 20 20"
+    height="16"
+    width="16"
+    icon-name="view-card-outline"
+    fill="currentColor"
+  >
+    <path
+      d="M17.882 1H2.118A1.12 1.12 0 001 2.119v15.762A1.119 1.119 0 002.118 19h15.764A1.12 1.12 0 0019 17.881V2.119A1.12 1.12 0 0017.882 1zm-.132 16.75H2.25v-7.138h15.5v7.138zM2.25 9.362V2.25h15.5v7.112H2.25z"
+    ></path>
+  </svg>
+</template>

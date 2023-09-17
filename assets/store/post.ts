@@ -2,15 +2,17 @@ import { defineStore } from "pinia";
 import { reactive, ref } from "vue";
 
 export const usePostStore = defineStore('post', () => {
-  const limit = 10;
+  let page = 1;
   const posts: Post[] = reactive([])
   const canLoadMore = ref(true)
 
-  let offset = 0;
-
   async function loadMore() {
     const newPosts = await (
-      await fetch('/post/fetch?offset=' + offset + '&limit=' + limit)
+      await fetch('/api/posts?page=' + page, {
+        headers: {
+          'accept': 'application/json'
+        }
+      })
     ).json() as Post[]
 
     if (newPosts.length === 0) {
@@ -21,7 +23,7 @@ export const usePostStore = defineStore('post', () => {
       posts.push(post)
     }
 
-    offset += limit
+    ++page
   }
 
   function getPostAt(index: number) {

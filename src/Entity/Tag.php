@@ -2,11 +2,15 @@
 
 namespace App\Entity;
 
+use ApiPlatform\Metadata\ApiResource;
+use ApiPlatform\Metadata\Get;
+use ApiPlatform\Metadata\GetCollection;
 use App\Repository\TagRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
+#[ApiResource(operations: [new Get(), new GetCollection()], paginationEnabled: false)]
 #[ORM\Entity(repositoryClass: TagRepository::class)]
 class Tag implements \Stringable
 {
@@ -18,7 +22,7 @@ class Tag implements \Stringable
     #[ORM\Column(length: 255)]
     private string $name;
 
-    /** @var Collection<Post> */
+    /** @var Collection<int,Post> */
     #[ORM\ManyToMany(targetEntity: Post::class, mappedBy: 'tags')]
     private Collection $posts;
 

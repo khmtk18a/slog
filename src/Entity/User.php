@@ -2,12 +2,15 @@
 
 namespace App\Entity;
 
+use ApiPlatform\Metadata\ApiResource;
+use ApiPlatform\Metadata\Get;
 use App\Repository\UserRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\UserInterface;
 
+#[ApiResource(operations: [new Get()])]
 #[ORM\Entity(repositoryClass: UserRepository::class)]
 class User implements UserInterface, \JsonSerializable
 {
@@ -29,7 +32,7 @@ class User implements UserInterface, \JsonSerializable
     #[ORM\Column(length: 132)]
     private string $photo;
 
-    /** @var Collection<Post> */
+    /** @var Collection<int,Post> */
     #[ORM\OneToMany(mappedBy: 'user', targetEntity: Post::class, orphanRemoval: true)]
     private Collection $posts;
 
@@ -147,6 +150,7 @@ class User implements UserInterface, \JsonSerializable
         return $this;
     }
 
+    /** @return array<string,mixed> */
     public function jsonSerialize(): array
     {
         return get_object_vars($this);

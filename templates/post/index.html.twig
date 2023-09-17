@@ -1,39 +1,27 @@
-{% extends 'base.html.twig' %}
-{% block title %}Post index{% endblock %}
-{% block body %}
-  <h1>Post index</h1>
-  <table class="table">
-    <thead>
-      <tr>
-        <th>Id</th>
-        <th>Title</th>
-        <th>Content</th>
-        <th>Score</th>
-        <th>CreatedAt</th>
-        <th>UpdatedAt</th>
-        <th>actions</th>
-      </tr>
-    </thead>
-    <tbody>
-      {% for post in posts %}
-        <tr>
-          <td>{{ post.id }}</td>
-          <td>{{ post.title }}</td>
-          <td>{{ post.content }}</td>
-          <td>{{ post.score }}</td>
-          <td>{{ post.createdAt ? post.createdAt|date("Y-m-d H:i:s") : '' }}</td>
-          <td>{{ post.updatedAt ? post.updatedAt|date("Y-m-d H:i:s") : '' }}</td>
-          <td>
-            <a href="{{ path('app_post_show', {'id': post.id}) }}">show</a>
-            <a href="{{ path('app_post_edit', {'id': post.id}) }}">edit</a>
-          </td>
-        </tr>
-      {% else %}
-        <tr>
-          <td colspan="7">no records found</td>
-        </tr>
-      {% endfor %}
-    </tbody>
-  </table>
-  <a href="{{ path("app_post_new") }}">Create new</a>
+{% extends '@EasyAdmin/page/content.html.twig' %}
+{% block page_title %}List of posts{% endblock %}
+{% block page_content %}
+  <div class="dropdown">
+    <button class="btn btn-secondary dropdown-toggle"
+            type="button"
+            data-bs-toggle="dropdown"
+            aria-expanded="false">
+      <i class="fas fa-filter"></i>
+    </button>
+    <ul class="dropdown-menu">
+      <li>
+        <a class="dropdown-item"
+           href="{{ path('app_post_index', {hot: true}) }}"><i class="fas fa-fire"></i> Hot</a>
+      </li>
+      <li>
+        <a class="dropdown-item" href="{{ path("app_post_index") }}">Normal</a>
+      </li>
+    </ul>
+  </div>
+  <div>
+    {% for post in pagination %}
+      {% include "components/post.html.twig" with {post: post} %}
+    {% endfor %}
+  </div>
+  {{ knp_pagination_render(pagination) }}
 {% endblock %}
