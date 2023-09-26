@@ -1,31 +1,52 @@
 {# default Sliding pagination control implementation #}
-{% if pageCount > 1 %}
-  <div class="join flex-row m-2">
-    {% if first is defined and current != first %}
-      <a class="join-item btn btn-outline"
-         href="{{ path(route, query|merge({(pageParameterName) : first})) }}">&lt;&lt;</a>
-    {% endif %}
-    {% if previous is defined %}
-      <a class="join-item btn btn-outline"
-         rel="prev"
-         href="{{ path(route, query|merge({(pageParameterName) : previous})) }}">&lt;</a>
-    {% endif %}
-    {% for page in pagesInRange %}
-      {% if page != current %}
-        <a class="join-item btn btn-outline"
-           href="{{ path(route, query|merge({(pageParameterName) : page})) }}">{{ page }}</a>
-      {% else %}
-        <a class="join-item btn btn-outline btn-disabled" href="#">{{ page }}</a>
-      {% endif %}
-    {% endfor %}
-    {% if next is defined %}
-      <a class="join-item btn btn-outline"
-         rel="next"
-         href="{{ path(route, query|merge({(pageParameterName) : next})) }}">&gt;</a>
-    {% endif %}
-    {% if last is defined and current != last %}
-      <a class="join-item btn btn-outline"
-         href="{{ path(route, query|merge({(pageParameterName) : last})) }}">&gt;&gt;</a>
-    {% endif %}
-  </div>
-{% endif %}
+<div class="content-panel-footer without-padding without-border">
+  {% if pageCount > 1 %}
+    <div class="list-pagination">
+      <div class="list-pagination-counter">
+        <strong>{{ totalCount }}</strong> results
+      </div>
+      <nav class="pager list-pagination-paginator first-page last-page">
+        <ul class="pagination">
+          {# {% if first is defined and current != first %}
+            <li class="page-item">
+              <a class="page-link"
+                 href="{{ path(route, query|merge({(pageParameterName) : previous})) }}">
+                <i class="fa fa-angles-left mx-1"></i> <span class="btn-label">First</span>
+              </a>
+            </li>
+          {% endif %} #}
+          {% if previous is defined %}
+            <li class="page-item">
+              <a class="page-link"
+                 href="{{ path(route, query|merge({(pageParameterName) : previous})) }}">
+                <i class="fa fa-angle-left mx-1"></i> <span class="btn-label">Previous</span>
+              </a>
+            </li>
+          {% endif %}
+          {% for page in pagesInRange %}
+            <li class="page-item{{ page == current ? ' active' : '' }}">
+              <a class="page-link"
+                 href="{{ page == current ? '#' : path(route, query|merge({(pageParameterName) : page})) }}">{{ page }}</a>
+            </li>
+          {% endfor %}
+          {% if next is defined %}
+            <li class="page-item">
+              <a class="page-link"
+                 href="{{ path(route, query|merge({(pageParameterName) : next})) }}">
+                <span class="btn-label">Next</span> <i class="fa fa-angle-right mx-1"></i>
+              </a>
+            </li>
+          {% endif %}
+          {# {% if last is defined and current != last %}
+            <li class="page-item">
+              <a class="page-link"
+                 href="{{ path(route, query|merge({(pageParameterName) : last})) }}">
+                <span class="btn-label">Last</span> <i class="fa fa-angles-right mx-1"></i>
+              </a>
+            </li>
+          {% endif %} #}
+        </ul>
+      </nav>
+    </div>
+  {% endif %}
+</div>

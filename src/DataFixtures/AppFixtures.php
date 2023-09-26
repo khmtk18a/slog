@@ -12,35 +12,42 @@ class AppFixtures extends Fixture
 {
     public function load(ObjectManager $manager): void
     {
-        // create admin user
+        // Create admin user
         $admin = (new User())
             ->setGoogleId('113493657564122458227')
             ->setName('Thanh Trần')
             ->setPhoto('https://avatars.githubusercontent.com/u/42226341')
-            ->setRoles(['ROLE_ADMIN']);
+            ->setAdmin(true);
 
         $manager->persist($admin);
         $manager->flush();
 
-        // create posts
-        for ($i = 0; $i < 20; ++$i) {
+        // Create posts
+        for ($i = 0; $i < 25; ++$i) {
             $post = new Post();
             $post->setTitle('Post #'.$i);
             $post->setContent('This is content of post #'.$i);
+            $post->setScore(random_int(0, 100));
             $post->setUser($admin);
 
-            for ($j = 0; $j < 5; ++$j) {
+            $commentCount = random_int(0, 20);
+            for ($j = 0; $j < $commentCount; ++$j) {
                 $comment = new Comment();
                 $comment->setUser($admin);
                 $comment->setContent('comment #'.$j);
                 $comment->setPost($post);
+
                 $manager->persist($comment);
 
-                $subComment = new Comment();
-                $subComment->setUser($admin);
-                $subComment->setContent('sub comment #'.$j);
-                $subComment->setParent($comment);
-                $manager->persist($subComment);
+                $subCommentCount = random_int(0, 5);
+                for ($k = 0; $k < $subCommentCount; ++$k) {
+                    $subComment = new Comment();
+                    $subComment->setUser($admin);
+                    $subComment->setContent('sub comment #'.$k);
+                    $subComment->setParent($comment);
+
+                    $manager->persist($subComment);
+                }
             }
 
             $manager->persist($post);

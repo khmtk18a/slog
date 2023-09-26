@@ -2,7 +2,6 @@
 
 namespace App\Controller\Admin;
 
-use App\Entity\Post;
 use App\Entity\Tag;
 use App\Entity\User;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Assets;
@@ -16,7 +15,7 @@ use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 #[Route('/admin')]
-#[IsGranted('ROLE_ADMIN')]
+#[IsGranted('for_admin')]
 class DashboardController extends AbstractDashboardController
 {
     public function configureDashboard(): Dashboard
@@ -39,11 +38,11 @@ class DashboardController extends AbstractDashboardController
     public function configureMenuItems(): iterable
     {
         yield MenuItem::linkToDashboard('Dashboard', 'fa fa-home');
+        yield MenuItem::linkToCrud('User', 'fas fa-users', User::class);
         yield MenuItem::linkToCrud('Tag', 'fas fa-tag', Tag::class);
-        // yield MenuItem::linkToCrud('Post', 'fas fa-newspaper', Post::class);
-        yield MenuItem::linkToUrl('Post', 'fas fa-newspaper', $this->url('app_post_index'));
-        yield MenuItem::subMenu('Post action', 'fas fa-question')->setSubItems([
-            MenuItem::linkToUrl('Create', 'fas fa-plus', $this->url('app_post_new')),
+        yield MenuItem::subMenu('Post', 'fas fa-newspaper')->setSubItems([
+            MenuItem::linkToUrl('List', 'fas fa-list', $this->url('app_post_index')),
+            MenuItem::linkToUrl('Create', 'fas fa-file-circle-plus', $this->url('app_post_new')),
         ]);
     }
 

@@ -2,6 +2,7 @@
 
 namespace App\Entity;
 
+use ApiPlatform\Metadata\ApiProperty;
 use ApiPlatform\Metadata\ApiResource;
 use ApiPlatform\Metadata\Get;
 use App\Repository\UserRepository;
@@ -22,10 +23,6 @@ class User implements UserInterface, \JsonSerializable
     #[ORM\Column(length: 21, unique: true)]
     private string $googleId;
 
-    /** @var list<string> */
-    #[ORM\Column]
-    private array $roles = [];
-
     #[ORM\Column(length: 120)]
     private string $name;
 
@@ -33,8 +30,12 @@ class User implements UserInterface, \JsonSerializable
     private string $photo;
 
     /** @var Collection<int,Post> */
+    #[ApiProperty(readableLink: false)]
     #[ORM\OneToMany(mappedBy: 'user', targetEntity: Post::class, orphanRemoval: true)]
     private Collection $posts;
+
+    #[ORM\Column]
+    private bool $isAdmin = false;
 
     public function __construct()
     {
@@ -75,21 +76,13 @@ class User implements UserInterface, \JsonSerializable
      */
     public function getRoles(): array
     {
-        $roles = $this->roles;
-        // guarantee every user at least has ROLE_USER
         $roles[] = 'ROLE_USER';
 
-        return array_unique($roles);
-    }
+        if ($this->isAdmin()) {
+            $roles[] = 'ROLE_ADMIN';
+        }
 
-    /**
-     * @param list<string> $roles
-     */
-    public function setRoles(array $roles): static
-    {
-        $this->roles = $roles;
-
-        return $this;
+        return $roles;
     }
 
     /**
@@ -150,9 +143,31 @@ class User implements UserInterface, \JsonSerializable
         return $this;
     }
 
-    /** @return array<string,mixed> */
+    /**
+     * @return array{
+     *  name: string,
+     *  photo: string,
+     *  roles: list<string>
+     * }
+     */
     public function jsonSerialize(): array
     {
-        return get_object_vars($this);
+        return [
+            'name' => $this->getName(),
+            'photo' => $this->getPhoto(),
+            'roles' => $this->getRoles(),
+        ];
+    }
+
+    public function isAdmin(): bool
+    {
+        return $this->isAdmin;
+    }
+
+    public function setAdmin(bool $isAdmin): static
+    {
+        $this->isAdmin = $isAdmin;
+
+        return $this;
     }
 }

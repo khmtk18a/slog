@@ -17,7 +17,9 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Attribute\MapQueryParameter;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 
+#[IsGranted('for_admin')]
 #[Route('/post')]
 class PostController extends AbstractController
 {
@@ -72,6 +74,7 @@ class PostController extends AbstractController
         ]);
     }
 
+    #[IsGranted('can_modify', 'post')]
     #[Route('/{id<\d+>}/edit', name: 'app_post_edit', methods: ['GET', 'POST'])]
     public function edit(Request $request, Post $post, EntityManagerInterface $entityManager): Response
     {
@@ -90,6 +93,7 @@ class PostController extends AbstractController
         ]);
     }
 
+    #[IsGranted('can_modify', 'post')]
     #[Route('/{id<\d+>}', name: 'app_post_delete', methods: ['POST'])]
     public function delete(Request $request, Post $post, EntityManagerInterface $entityManager): Response
     {
