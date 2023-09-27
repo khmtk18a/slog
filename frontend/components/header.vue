@@ -5,8 +5,9 @@ import { useLSidebarStore } from "../stores/lSidebar";
 import { useUserStore } from "../stores/user";
 import { useArticleStore } from "../stores/article";
 import mobileSearch from "./mobileSearch.vue";
+import { useRouter } from "vue-router";
 
-
+const router = useRouter();
 const lSidebarStore = useLSidebarStore();
 const userStore = useUserStore();
 const moblieSearchVisible = ref();
@@ -33,6 +34,13 @@ function handleSignOut() {
   userStore.logOut();
   window.location.href = `${window.location.origin}/user/logout`
 }
+
+function handleClick(articleId) {
+  router.push({ name: 'article', params: { id: articleId } }).then(() => {
+    window.location.reload();
+  });
+}
+
 </script>
 
 <template>
@@ -65,7 +73,7 @@ function handleSignOut() {
         </span>
         <ul v-if="articleStore.searchResults">
           <li v-for="sr in articleStore.searchResults">
-            <a :href="`/article/${sr.id}`" class="py-[0.25rem] hover:bg-normal-btn-hover block">{{ sr.title }}</a>
+            <a @click="handleClick(sr.id)" class="py-[0.25rem] hover:bg-normal-btn-hover block">{{ sr.title }}</a>
           </li>
         </ul>
       </div>

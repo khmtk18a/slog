@@ -42,10 +42,10 @@ export const useArticleStore = defineStore("article", {
         this.fetchVotes(this.article.id, true);
       });
     },
-    postVote(value, post) {
+    postVote(user, value, post) {
       const body = {
         value,
-        user: `/api/users/1`,
+        user: `/api/users/${user}`,
         post: `/api/posts/${post}`,
       };
       baseAxios.post(`/api/votes`, body).then((res) => {

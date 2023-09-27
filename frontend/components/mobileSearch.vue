@@ -1,12 +1,20 @@
 <script setup>
 import { ref } from "vue";
 import { useArticleStore } from "../stores/article";
+import { useRouter } from "vue-router";
 
+const router = useRouter();
 const emits = defineEmits(["close", "search"]);
 const articleStore = useArticleStore();
 const searchValue = ref();
 function handleSearch(keyword) {
   articleStore.search(keyword)
+}
+
+function handleClick(articleId) {
+  router.push({ name: 'article', params: { id: articleId } }).then(() => {
+    window.location.reload();
+  });
 }
 </script>
 <template>
@@ -27,7 +35,7 @@ function handleSearch(keyword) {
         </span>
         <ul v-if="articleStore.searchResults">
           <li v-for="sr in articleStore.searchResults">
-            <a :href="`/article/${sr.id}`" class="py-[0.25rem] hover:bg-normal-btn-hover block">{{ sr.title }}</a>
+            <a @click="handleClick(sr.id)" class="py-[0.25rem] hover:bg-normal-btn-hover block">{{ sr.title }}</a>
           </li>
         </ul>
       </div>

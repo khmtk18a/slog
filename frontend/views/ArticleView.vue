@@ -104,12 +104,12 @@ async function handleComment() {
           <span
             class="flex w-fit items-center rounded-[1rem] bg-green-100 px-[1rem] py-[0.25rem] text-[1rem] text-normal-text-color">
             <button class="z-20 leading-none hover:bg-normal-btn-hover active:bg-normal-btn-active"
-              @click="articleStore.postVote(1, article.id)">
+              @click="articleStore.postVote(userStore.info.id, 1, article.id)">
               <i class="pi pi-arrow-up"></i>
             </button>
             <span class="z-20 mx-[0.25rem]">{{ article.score }}</span>
             <button class="z-20 leading-none hover:bg-normal-btn-hover active:bg-normal-btn-active"
-              @click="articleStore.postVote(-1, article.id)">
+              @click="articleStore.postVote(userStore.info.id, -1, article.id)">
               <i class="pi pi-arrow-down"></i>
             </button>
           </span>
